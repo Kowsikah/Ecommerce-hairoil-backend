@@ -18,6 +18,9 @@ app.use(cors({ origin: process.env.CLIENT_URL }));
 app.use(express.json());
 app.use(morgan('dev'));
 
+app.get('/', (req, res) => {
+  res.send('Server is up and running!');
+});
 app.get('/api/health', (_req, res) => res.json({ ok: true }));
 app.use('/api/auth', authRoutes); // <-- NEW
 app.use('/api/products', productRoutes);
