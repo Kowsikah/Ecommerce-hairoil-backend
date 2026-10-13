@@ -9,7 +9,30 @@ import orderRoutes from './routes/order.js';
 import authRoutes from './routes/auth.js'; // <-- NEW: login / signup
 
 const app = express();
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  'http://localhost:3000',
+  'http://localhost:5173' // add if using Vite default port
+].filter(Boolean); // removes undefined entries
 
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    // Check if the incoming origin matches or matches without a trailing slash
+    const isAllowed = allowedOrigins.some(allowed => 
+      origin === allowed || origin === allowed.replace(/\/$/, '')
+    );
+
+    if (isAllowed) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+}));
 // NEW: needed on Render/Railway/Heroku so the login rate limiter sees real visitor IPs
 app.set('trust proxy', 1);
 
