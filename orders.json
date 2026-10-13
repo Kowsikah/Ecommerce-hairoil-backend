@@ -1,0 +1,23 @@
+[
+  {
+    "id": "ord_5z7p53k",
+    "items": [
+      {
+        "productId": "c50b65bc-ec9e-4b67-abd0-9e6b59dae6b2",
+        "qty": 1
+      }
+    ],
+    "customer": {
+      "name": "kowsika H",
+      "email": "kowsikah217@gmail.com",
+      "phone": "9150619138",
+      "address": "60/8 Anjugam Nagar,\nReliance Fresh Back side\n",
+      "city": "Salem",
+      "state": "TamilNadu",
+      "pincode": "636001",
+      "notes": "ok"
+    },
+    "status": "Pending",
+    "createdAt": "2026-10-11T12:54:37.791Z"
+  }
+]

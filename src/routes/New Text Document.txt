@@ -1,0 +1,46 @@
+import express from 'express';
+
+const router = express.Router();
+
+/* ── Order Creation Endpoint (POST /api/orders) ── */
+router.post('/', async (req, res) => {
+  try {
+    const { items, shippingDetails, totalAmount } = req.body;
+
+    // Basic validation
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ error: 'Cart is empty or invalid items provided.' });
+    }
+
+    if (!shippingDetails || !shippingDetails.name || !shippingDetails.address) {
+      return res.status(400).json({ error: 'Incomplete shipping details provided.' });
+    }
+
+    // Create the order object (You can connect this to MongoDB / PostgreSQL or your database model)
+    const newOrder = {
+      id: 'ord_' + Math.random().toString(36.substring(2, 9)),
+      items,
+      shippingDetails,
+      totalAmount: totalAmount || 0,
+      status: 'Pending',
+      createdAt: new Date().toISOString(),
+    };
+
+    console.log('📦 New Order Received:', newOrder);
+
+    // TODO: Save newOrder to your database here
+    // const savedOrder = await OrderModel.create(newOrder);
+
+    return res.status(201).json({
+      success: true,
+      message: 'Order placed successfully!',
+      orderId: newOrder.id,
+      order: newOrder,
+    });
+  } catch (error) {
+    console.error('Error processing order:', error);
+    return res.status(500).json({ error: 'Internal server error while processing order.' });
+  }
+});
+
+export default router;
