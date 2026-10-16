@@ -13,9 +13,10 @@ import { publicTracking } from './routes/tracking.js'; // <-- order tracking
 const app = express();
 const allowedOrigins = [
   process.env.CLIENT_URL,
+  'https://beinlovehairoil.vercel.app',
   'http://localhost:3000',
-  'http://localhost:5173' // add if using Vite default port
-].filter(Boolean); // removes undefined entries
+  'http://localhost:5173'
+] // removes undefined entries
 
 app.use(cors({
   origin: (origin, callback) => {
