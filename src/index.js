@@ -7,6 +7,8 @@ import productRoutes from './routes/products.js';
 import adminRoutes from './routes/admin.js';
 import orderRoutes from './routes/order.js';
 import authRoutes from './routes/auth.js'; // <-- NEW: login / signup
+import chatRoutes from './routes/chat.js'; // <-- Groq chatbot
+import { publicTracking } from './routes/tracking.js'; // <-- order tracking
 
 const app = express();
 const allowedOrigins = [
@@ -37,7 +39,6 @@ app.use(cors({
 app.set('trust proxy', 1);
 
 app.use(helmet());
-app.use(cors({ origin: process.env.CLIENT_URL }));
 app.use(express.json());
 app.use(morgan('dev'));
 
@@ -45,9 +46,11 @@ app.get('/', (req, res) => {
   res.send('Server is up and running!');
 });
 app.get('/api/health', (_req, res) => res.json({ ok: true }));
+app.use('/api/chat', chatRoutes); // <-- chatbot
 app.use('/api/auth', authRoutes); // <-- NEW
 app.use('/api/products', productRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/orders', publicTracking); // POST /api/orders/track (before orderRoutes)
 app.use('/api/orders', orderRoutes);
 
 // 404 + error handler
@@ -57,6 +60,7 @@ app.use((err, _req, res, _next) => {
   res.status(500).json({ error: 'Something went wrong' });
 });
 
-app.listen(process.env.PORT, () =>
-  console.log(`🚀 API running on http://localhost:${process.env.PORT}`)
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () =>
+  console.log(`🚀 API running on http://localhost:${PORT}`)
 );
